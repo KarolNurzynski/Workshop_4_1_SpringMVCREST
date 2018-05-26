@@ -25,49 +25,56 @@ public class BookController {
                 "Bruce Eckel","Helion","programming");
     }
 
-    @RequestMapping("/listOfBooks")
+    @GetMapping("/")
     public List<Book> listOfBooks() {
-        System.out.println(memoryBookService.getList().toString());
         return memoryBookService.getList();
     }
 
-    @RequestMapping("/getBookById")
-    public Book getBookById(@RequestParam long id) {
+    @GetMapping("/{id}")
+    public Book getBookById(@PathVariable long id) {
         return memoryBookService.getBookById(id);
     }
 
-    @PostMapping("/addBook")
-    public void addBook(@RequestParam long id,
-                        @RequestParam String isbn,
-                        @RequestParam String title,
-                        @RequestParam String author,
-                        @RequestParam String publisher,
-                        @RequestParam String type) {
+//    @PostMapping("/")
+//    public void addBook(@RequestParam long id,
+//                        @RequestParam String isbn,
+//                        @RequestParam String title,
+//                        @RequestParam String author,
+//                        @RequestParam String publisher,
+//                        @RequestParam String type) {
+//        Book book = new Book(id,isbn,title,author,publisher,type);
+//        memoryBookService.addBook(book);
+//}
 
-        Book book = new Book(id, isbn, title, author, publisher, type);
+    // Sprawdzam postmanem: requestbody parsuje jsony/dane z formularza do obiektow (niestety z formularzem mi nie zadzialalo - prawdopodobnie trzeba ustawic odpowiedni header w formularzu)
+    @PostMapping("/")
+    public void addBook(@RequestBody Book book)
+    {
         memoryBookService.addBook(book);
     }
 
-    // OPCJA 3 - wykorzystanie @RequestBody - Spring pobierze dane z HTTP i przeksztalci je na obiekt Javy
-//    @PostMapping("/addBook")
-//    public void addBook(@RequestBody Book book) {
-//        memoryBookService.addBook(book);
+//    http://localhost:8080/books/editBook?id=1&isbn=123&title=tit&author=aut&publisher=pub&type=typ
+
+//    @PutMapping("/{id}")
+//    public void editBook(@RequestParam long id,
+//                        @RequestParam String isbn,
+//                        @RequestParam String title,
+//                        @RequestParam String author,
+//                        @RequestParam String publisher,
+//                        @RequestParam String type) {
+//
+//        Book book = new Book(id, isbn, title, author, publisher, type);
+//        memoryBookService.editBook(book);
 //    }
 
-    @PutMapping("/editBook")
-    public void editBook(@RequestParam long id,
-                        @RequestParam String isbn,
-                        @RequestParam String title,
-                        @RequestParam String author,
-                        @RequestParam String publisher,
-                        @RequestParam String type) {
-
-        Book book = new Book(id, isbn, title, author, publisher, type);
+    @PutMapping("/{id}")
+    public void editBook(@RequestBody Book book) {
         memoryBookService.editBook(book);
     }
 
-    @DeleteMapping("/deleteBook")
-    public void deleteBook(@RequestParam long id) {
+
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable long id) {
         memoryBookService.deleteBook(id);
     }
 
